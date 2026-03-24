@@ -2,54 +2,82 @@
 
 ## 📌 Overview
 
-This project is an AI-based driver monitoring system that detects drowsiness in real time using computer vision techniques. It tracks eye movements using facial landmarks and calculates the Eye Aspect Ratio (EAR) to determine whether the driver's eyes are closed for a prolonged period.
+This project is an AI-based real-time driver drowsiness detection system using MediaPipe Face Mesh running on Raspberry Pi. It detects eye closure using Eye Aspect Ratio (EAR) and triggers alerts through a buzzer and Telegram notifications.
 
 ---
 
 ## 🚀 Features
 
-* Real-time face and eye detection
-* Eye Aspect Ratio (EAR) based drowsiness detection
-* Visual alert when drowsiness is detected
-* Lightweight and runs on standard webcam
-* Edge AI implementation (no cloud required)
+* Real-time eye tracking using MediaPipe
+* Drowsiness detection using EAR (Eye Aspect Ratio)
+* Buzzer alert system (GPIO)
+* Instant Telegram notification
+* Edge AI processing (Raspberry Pi)
+* Blink vs Drowsiness differentiation
 
 ---
 
-## ⚙️ Technologies Used
+## ⚙️ Hardware Used
+
+* Raspberry Pi
+* USB Camera
+* Buzzer (GPIO Pin 17)
+
+---
+
+## 💻 Software & Technologies
 
 * Python
 * OpenCV
-* dlib (Facial Landmark Detection)
-* SciPy (Distance calculation)
+* MediaPipe
+* RPi.GPIO
+* Telegram Bot API
+* Requests Library
 
 ---
 
-## 🧠 Working Principle
+## 🧠 Detection Logic
 
 ### 👁️ Eye Aspect Ratio (EAR)
 
-The system calculates EAR using eye landmarks:
+Drowsiness is detected based on eye closure duration:
 
-EAR = (||p2 - p6|| + ||p3 - p5||) / (2 * ||p1 - p4||)
-
-* If EAR is **low** → Eyes are closed
-* If EAR is **high** → Eyes are open
+* If EAR < threshold → eyes closed
+* If closed for multiple frames → DROWSINESS detected
 
 ---
 
-### ⚠️ Drowsiness Detection Logic
+## 🔌 Working Principle
 
-* If EAR < threshold (0.25)
-* For consecutive frames (>20)
-  👉 System triggers **DROWSINESS ALERT**
+1. Camera captures live video
+2. MediaPipe detects facial landmarks
+3. Eye landmarks are extracted
+4. EAR is calculated
+5. If EAR < threshold for continuous frames:
+
+   * Buzzer turns ON
+   * Telegram alert is sent
+6. If eyes open:
+
+   * System resets
+   * Buzzer OFF
+
+---
+
+## 📱 Telegram Alert
+
+When drowsiness is detected:
+
+```text
+⚠️ Drowsiness Detected! Please take a break.
+```
 
 ---
 
 ## 📦 Installation
 
 ```bash
-pip install opencv-python dlib scipy
+pip install opencv-python mediapipe RPi.GPIO requests
 ```
 
 ---
@@ -62,28 +90,21 @@ python src/main.py
 
 ---
 
-## 📷 Output
-
-* Displays real-time EAR value
-* Shows alert message when driver is drowsy
-
----
-
 ## 🌐 Applications
 
-* Automotive safety systems
-* Driver monitoring systems (DMS)
-* Smart vehicles
-* Accident prevention systems
+* Driver safety systems
+* Automotive ADAS systems
+* Smart vehicle monitoring
+* Fleet management systems
 
 ---
 
 ## 🔮 Future Improvements
 
-* Add buzzer or alarm system
-* Integrate with IoT for remote alerts
-* Use deep learning models for higher accuracy
-* Add head pose detection
+* Add face recognition (driver identification)
+* Integrate GPS alert system
+* Cloud dashboard for monitoring
+* AI fatigue prediction model
 
 ---
 
